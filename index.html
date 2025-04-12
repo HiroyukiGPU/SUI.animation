@@ -10,11 +10,11 @@
     </style>
 </head>
 <body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- GLTFLoaderのインポート -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/loaders/GLTFLoader.js"></script>
-    
-    <script>
+    <!-- Three.jsのモジュール版をインポート -->
+    <script type="module">
+        import * as THREE from 'https://cdn.skypack.dev/three@0.128.0';
+        import { GLTFLoader } from 'https://cdn.skypack.dev/three/examples/js/loaders/GLTFLoader';
+
         // シーン、カメラ、レンダラーの作成
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -31,7 +31,7 @@
         scene.add(directionalLight);
 
         // glTFローダーでモデルを読み込む
-        const loader = new THREE.GLTFLoader();
+        const loader = new GLTFLoader();
         loader.load('model.glb', function (gltf) {
             scene.add(gltf.scene);
             animate(gltf.animations);
