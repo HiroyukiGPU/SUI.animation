@@ -11,7 +11,9 @@
 </head>
 <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- GLTFLoaderのインポート -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/loaders/GLTFLoader.js"></script>
+    
     <script>
         // シーン、カメラ、レンダラーの作成
         const scene = new THREE.Scene();
@@ -20,11 +22,21 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
+        // ライトの追加
+        const light = new THREE.AmbientLight(0xffffff, 1); // アンビエントライト
+        scene.add(light);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1); // 指向性ライト
+        directionalLight.position.set(5, 5, 5); // ライトの位置を設定
+        scene.add(directionalLight);
+
         // glTFローダーでモデルを読み込む
         const loader = new THREE.GLTFLoader();
         loader.load('your_model.glb', function (gltf) {
             scene.add(gltf.scene);
             animate(gltf.animations);
+        }, undefined, function (error) {
+            console.error('モデル読み込みエラー:', error);
         });
 
         // アニメーション用の関数
@@ -43,7 +55,9 @@
             animateFrame();
         }
 
-        camera.position.z = 5;
+        // カメラ位置の設定
+        camera.position.set(0, 1, 5); // カメラを適切な位置に設定
+        camera.lookAt(0, 0, 0); // カメラがアニメーションの中心を向くように設定
     </script>
 </body>
 </html>
