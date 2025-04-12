@@ -1,59 +1,49 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>FBX Viewer</title>
-  <style>
-    body { margin: 0; overflow: hidden; }
-    canvas { display: block; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Animation</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
 </head>
 <body>
-  <script type="module">
-    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js';
-    import { FBXLoader } from 'https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/loaders/FBXLoader.js';
-    import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/controls/OrbitControls.js';
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/loaders/GLTFLoader.js"></script>
+    <script>
+        // シーン、カメラ、レンダラーの作成
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
 
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xeeeeee);
+        // glTFローダーでモデルを読み込む
+        const loader = new THREE.GLTFLoader();
+        loader.load('your_model.glb', function (gltf) {
+            scene.add(gltf.scene);
+            animate(gltf.animations);
+        });
 
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 2, 5);
+        // アニメーション用の関数
+        function animate(animations) {
+            const mixer = new THREE.AnimationMixer(scene);
+            animations.forEach((clip) => {
+                mixer.clipAction(clip).play();
+            });
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
+            function animateFrame() {
+                requestAnimationFrame(animateFrame);
+                mixer.update(0.01);
+                renderer.render(scene, camera);
+            }
 
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
+            animateFrame();
+        }
 
-    const light = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(1, 2, 3);
-    scene.add(light);
-
-    const ambientLight = new THREE.AmbientLight(0x404040);
-    scene.add(ambientLight);
-
-    const loader = new FBXLoader();
-    loader.load('model.fbx', function (object) {
-      object.scale.set(0.01, 0.01, 0.01);
-      scene.add(object);
-    }, undefined, function (error) {
-      console.error('読み込みエラー:', error);
-    });
-
-    function animate() {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
-    }
-    animate();
-
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-  </script>
+        camera.position.z = 5;
+    </script>
 </body>
 </html>
