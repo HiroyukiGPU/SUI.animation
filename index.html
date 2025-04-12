@@ -32,7 +32,7 @@
 
         // glTFローダーでモデルを読み込む
         const loader = new THREE.GLTFLoader();
-        loader.load('your_model.glb', function (gltf) {
+        loader.load('model.glb', function (gltf) {
             scene.add(gltf.scene);
             animate(gltf.animations);
         }, undefined, function (error) {
