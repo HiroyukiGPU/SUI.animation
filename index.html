@@ -13,7 +13,7 @@
     <!-- Three.jsのモジュール版をインポート -->
     <script type="module">
         import * as THREE from 'https://cdn.skypack.dev/three@0.128.0';
-        import { GLTFLoader } from 'https://cdn.skypack.dev/three/examples/js/loaders/GLTFLoader';
+        import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js';
 
         // シーン、カメラ、レンダラーの作成
         const scene = new THREE.Scene();
@@ -32,7 +32,7 @@
 
         // glTFローダーでモデルを読み込む
         const loader = new GLTFLoader();
-        loader.load('model.glb', function (gltf) {
+        loader.load('your_model.glb', function (gltf) {
             scene.add(gltf.scene);
             animate(gltf.animations);
         }, undefined, function (error) {
