@@ -10,7 +10,6 @@
 </head>
 <body>
   <script type="module">
-    // ✅ ここをCDNで読み込むように修正
     import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js';
     import { FBXLoader } from 'https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/loaders/FBXLoader.js';
     import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/controls/OrbitControls.js';
@@ -37,7 +36,7 @@
 
     const loader = new FBXLoader();
     loader.load('model.fbx', function (object) {
-      object.scale.set(0.01, 0.01, 0.01); // サイズ調整（必要に応じて）
+      object.scale.set(0.01, 0.01, 0.01);
       scene.add(object);
     }, undefined, function (error) {
       console.error('読み込みエラー:', error);
